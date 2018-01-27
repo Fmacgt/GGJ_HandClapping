@@ -33,21 +33,21 @@ namespace GGJ18
 		{
 			_fromRotate = Quaternion.AngleAxis(fromAngle, axisTr.forward);
 			_toRotate = Quaternion.AngleAxis(toAngle, axisTr.forward);
-			LeanTween.value(0f, 1f, duration).setEase(rotateCurve)
+			LeanTween.value(gameObject, 0f, 1f, duration).setEase(rotateCurve)
 				.setOnUpdate(_updateRotate)
 				.setOnComplete(_checkGameOver);
 		}
 
 		public void stop()
 		{
-			LeanTween.cancelAll();
+			LeanTween.cancel(gameObject);
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////
 
 		private void _updateRotate(float t)
 		{
-			axisTr.rotation = Quaternion.Lerp(_fromRotate, _toRotate, t);
+			axisTr.localRotation = Quaternion.Lerp(_fromRotate, _toRotate, t);
 		}
 
 		private void _checkGameOver()

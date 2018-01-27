@@ -22,7 +22,6 @@ namespace GGJ18
 				if (otherRb != null) {
 					var otherHand = otherRb.gameObject.GetComponent<HandTrigger>();
 					float matchRatio = Mathf.Abs(Vector3.Dot(transform.up, otherHand.transform.up));
-					Debug.LogFormat("{0}% matching", matchRatio * 100f);
 					control.onHandHeld(matchRatio);
 				}
 			}

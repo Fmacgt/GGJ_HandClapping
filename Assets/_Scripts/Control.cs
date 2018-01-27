@@ -10,6 +10,8 @@ namespace GGJ18
 	{
 		public Transform cameraTr;
 
+		public Transform centerTr;
+		public int personCount = 12;
 		public Person firstPerson;
 		public Person secondPerson;
 
@@ -41,11 +43,13 @@ namespace GGJ18
 
 		//==============================================================================
 
+		private float _radius;
+		private Person[] _persons;
+
 		private Person _currentPerson;
 		private Person _nextPerson;
 
 		private bool _canHold = true;
-		private Vector3 _personSpawnPt;
 
 		private int _counter = 0;
 		private float _filledPercent;
@@ -54,25 +58,50 @@ namespace GGJ18
 
 		private void Start()
 		{
-			_currentPerson = firstPerson;
-			_currentPerson.leftHandRotate.control = this;
-			_currentPerson.leftTrigger.control = this;
-			_currentPerson.rightHandRotate.control = this;
-			_currentPerson.rightTrigger.control = this;
+			float circleLength = personCount * spawnDistanceStep;
+			_radius = circleLength * 0.5f / Mathf.PI;
+			Debug.LogFormat("{0} person every {1} => {2} length and {3} radius",
+					personCount, spawnDistanceStep, circleLength, _radius);
 
-			_nextPerson = secondPerson;
-			_nextPerson.leftHandRotate.control = this;
-			_nextPerson.leftTrigger.control = this;
-			_nextPerson.rightHandRotate.control = this;
-			_nextPerson.rightTrigger.control = this;
+			_persons = new Person[personCount];
+			var d = _radius * Vector3.up;
+			for (int i = 0; i < personCount; i++) {
+				float angle = i * 360f / (float)personCount;
+				var rotate = Quaternion.AngleAxis(angle, Vector3.forward);
+				var offset = rotate * d;
+				var spawnPt = centerTr.position - offset;
+
+				var personObj = Instantiate(personPrefab);
+				var personTr = personObj.transform;
+				personTr.position = spawnPt;
+				personTr.rotation = rotate;
+
+				var person = personObj.GetComponent<Person>();
+				person.leftHandRotate.control = this;
+				person.leftTrigger.control = this;
+				person.rightHandRotate.control = this;
+				person.rightTrigger.control = this;
+
+				_persons[i] = person;
+			}
+
+			for (int i = 0; i < personCount - 1; i++) {
+				_persons[i].next = _persons[i + 1];
+			}
+			_persons[personCount-1].next = _persons[0];
+
+			_currentPerson = _persons[0];
+			_nextPerson = _persons[1];
+
+
+			_persons[0].triggered = true;
 			
-			_personSpawnPt = _nextPerson.transform.position;
-
 
 			_filledPercent = initialFillingPercent;
 			_currentPerson.setFillPercent(_filledPercent);
 
 
+			focusAt(_currentPerson.transform, _currentPerson.transform, 0f);
 			startGameGroup.SetActive(true);
 		}
 
@@ -93,14 +122,24 @@ namespace GGJ18
 			var offset = centerPt - cameraTr.position;
 			offset.z = 0f;
 
+			var up = Vector3.Slerp(trA.up, trB.up, 0.5f);
+
 			if (duration >= 0.005f) {
 				LeanTween.move(cameraTr.gameObject, cameraTr.position + offset, duration)
 					.setEase(focusCurve)
 					.setOnComplete(() => {
 							_nextPerson.triggerSelf();
 						});
+				var oldUp = cameraTr.up;
+				LeanTween.value(gameObject, 0f, 1f, duration)
+					.setEase(focusCurve)
+					.setOnUpdate((t) => {
+							var newUp = Vector3.Slerp(oldUp, up, t);
+							cameraTr.rotation = Quaternion.LookRotation(cameraTr.forward, newUp);
+						});
 			} else {
 				cameraTr.Translate(offset, Space.World);
+				cameraTr.rotation = Quaternion.LookRotation(cameraTr.forward, up);
 			}
 		}
 
@@ -110,7 +149,7 @@ namespace GGJ18
 
 			_counter = 0;
 
-			focusAt(firstPerson.transform, secondPerson.transform, focusTime);
+			focusAt(_currentPerson.transform, _nextPerson.transform, focusTime);
 			startGameGroup.SetActive(false);
 		}
 
@@ -130,16 +169,6 @@ namespace GGJ18
 			_nextPerson.showHoldHandEffect(true);
 
 
-			// TODO: spawn new 'Person'
-			_personSpawnPt += _nextPerson.transform.right * spawnDistanceStep;
-
-			var personObj = Instantiate(personPrefab);
-			var personTr = personObj.transform;
-			personTr.position = _personSpawnPt;
-			float angle = Vector3.Angle(_nextPerson.transform.right, Vector3.right);
-			personTr.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
-
 			// TODO: update current and next 'Person'
 			_currentPerson = _nextPerson;
 
@@ -148,11 +177,8 @@ namespace GGJ18
 			_filledPercent += (matchRatio - 0.5f) * 2f * _currentPerson.data.fillIncrement;
 			_currentPerson.setFillPercent(_filledPercent);
 
-			_nextPerson = personObj.GetComponent<Person>();
-			_nextPerson.leftHandRotate.control = this;
-			_nextPerson.leftTrigger.control = this;
-			_nextPerson.rightHandRotate.control = this;
-			_nextPerson.rightTrigger.control = this;
+			_nextPerson = _currentPerson.next;
+			_nextPerson.triggered = false;
 
 
 			// TODO: re-focus camera

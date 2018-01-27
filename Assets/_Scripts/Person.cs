@@ -28,6 +28,8 @@ namespace GGJ18
 
 		public Transform fillerTr;
 
+		public Person next;
+
 		/////////////////////////////////////////////////////////////////////////////////////
 
 		public void triggerSelf()
