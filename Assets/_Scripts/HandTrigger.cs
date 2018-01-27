@@ -15,12 +15,16 @@ namespace GGJ18
 
 		private void OnTriggerEnter2D(Collider2D other)
 		{
-			var otherRb = other.attachedRigidbody;
 			rotateHand.stop();
 
 			if (!isLeftHand) {
-				Debug.LogFormat("calling {0}.onHandHeld()", control);
-				control.onHandHeld();
+				var otherRb = other.attachedRigidbody;
+				if (otherRb != null) {
+					var otherHand = otherRb.gameObject.GetComponent<HandTrigger>();
+					float matchRatio = Mathf.Abs(Vector3.Dot(transform.up, otherHand.transform.up));
+					Debug.LogFormat("{0}% matching", matchRatio * 100f);
+					control.onHandHeld(matchRatio);
+				}
 			}
 		}
 	}

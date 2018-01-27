@@ -413,6 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8366f9fe0a44641378b68de743dc5488, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 2f26fc1fc8e7e47bfbb7a5289838c2e3, type: 2}
   leftHandRotate: {fileID: 114848399935154622}
   leftTrigger: {fileID: 114544309621022114}
   leftHandRenderer: {fileID: 212806700988557370}
@@ -495,7 +496,7 @@ MonoBehaviour:
   control: {fileID: 0}
   fromAngle: -30
   toAngle: -150
-  rotateTime: 0.2
+  rotateTime: 0.15
 --- !u!212 &212315162815123606
 SpriteRenderer:
   m_ObjectHideFlags: 1

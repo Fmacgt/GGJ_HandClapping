@@ -7,6 +7,8 @@ namespace GGJ18
 {
 	public sealed class Person : MonoBehaviour
 	{
+		public PersonData data;
+
 		public RotateHand leftHandRotate;
 		public HandTrigger leftTrigger;
 		public SpriteRenderer leftHandRenderer;

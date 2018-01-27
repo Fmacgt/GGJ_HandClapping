@@ -536,6 +536,7 @@ MonoBehaviour:
   startGameGroup: {fileID: 1616459398}
   counterLabel: {fileID: 1137812901}
   totalCounterLabel: {fileID: 659607774}
+  initialFillingPercent: 0
   state: 0
 --- !u!4 &925436246
 Transform:

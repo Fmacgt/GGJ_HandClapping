@@ -26,6 +26,8 @@ namespace GGJ18
 		public Text counterLabel;
 		public Text totalCounterLabel;
 
+		public float initialFillingPercent = 0.5f;
+
 		//==============================================================================
 
 		public enum GameStates
@@ -46,6 +48,7 @@ namespace GGJ18
 		private Vector3 _personSpawnPt;
 
 		private int _counter = 0;
+		private float _filledPercent;
 
 		/////////////////////////////////////////////////////////////////////////////////////
 
@@ -64,6 +67,10 @@ namespace GGJ18
 			_nextPerson.rightTrigger.control = this;
 			
 			_personSpawnPt = _nextPerson.transform.position;
+
+
+			_filledPercent = initialFillingPercent;
+			_currentPerson.setFillPercent(_filledPercent);
 
 
 			startGameGroup.SetActive(true);
@@ -109,7 +116,7 @@ namespace GGJ18
 
 		/////////////////////////////////////////////////////////////////////////////////////
 
-		public void onHandHeld()
+		public void onHandHeld(float matchRatio)
 		{
 			// TODO: increase score?
 			_counter++;
@@ -136,7 +143,10 @@ namespace GGJ18
 			// TODO: update current and next 'Person'
 			_currentPerson = _nextPerson;
 
-			_currentPerson.setFillPercent(_counter * 0.05f);
+
+			// TODO: update filled percent
+			_filledPercent += (matchRatio - 0.5f) * 2f * _currentPerson.data.fillIncrement;
+			_currentPerson.setFillPercent(_filledPercent);
 
 			_nextPerson = personObj.GetComponent<Person>();
 			_nextPerson.leftHandRotate.control = this;
