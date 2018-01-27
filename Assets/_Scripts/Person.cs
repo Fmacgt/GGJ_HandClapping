@@ -24,6 +24,8 @@ namespace GGJ18
 		public Color successColor = Color.green;
 		public Color failureColor = Color.red;
 
+		public Transform fillerTr;
+
 		/////////////////////////////////////////////////////////////////////////////////////
 
 		public void triggerSelf()
@@ -51,6 +53,14 @@ namespace GGJ18
 			} else {
 				rightHandRenderer.color = failureColor;
 			}
+		}
+
+		public void setFillPercent(float percent)
+		{
+			percent = Mathf.Clamp(percent, 0f, 1f);
+
+			fillerTr.localScale = new Vector3(1f, percent, 1f);
+			fillerTr.localPosition = Vector3.down * (1f - percent) * 0.5f;
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////

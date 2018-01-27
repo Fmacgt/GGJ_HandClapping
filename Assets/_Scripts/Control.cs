@@ -124,15 +124,19 @@ namespace GGJ18
 
 
 			// TODO: spawn new 'Person'
-			_personSpawnPt += Vector3.right * spawnDistanceStep;
+			_personSpawnPt += _nextPerson.transform.right * spawnDistanceStep;
 
 			var personObj = Instantiate(personPrefab);
 			var personTr = personObj.transform;
 			personTr.position = _personSpawnPt;
+			float angle = Vector3.Angle(_nextPerson.transform.right, Vector3.right);
+			personTr.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
 
 			// TODO: update current and next 'Person'
 			_currentPerson = _nextPerson;
+
+			_currentPerson.setFillPercent(_counter * 0.05f);
 
 			_nextPerson = personObj.GetComponent<Person>();
 			_nextPerson.leftHandRotate.control = this;
