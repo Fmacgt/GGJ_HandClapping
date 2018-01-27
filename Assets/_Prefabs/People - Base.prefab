@@ -51,6 +51,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4759903013892984}
+  - component: {fileID: 114798492881937268}
   m_Layer: 0
   m_Name: People - Base
   m_TagString: Untagged
@@ -119,7 +120,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4598496984132684}
   - component: {fileID: 212315162815123606}
-  - component: {fileID: 114317716463682614}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -357,23 +357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isLeftHand: 0
   rotateHand: {fileID: 114955898213932184}
---- !u!114 &114317716463682614
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1905087138483146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8366f9fe0a44641378b68de743dc5488, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leftHandRotate: {fileID: 114848399935154622}
-  rightHandRotate: {fileID: 114955898213932184}
-  leftFromAngle: 150
-  leftToAngle: 30
-  leftRotateTime: 0.5
-  triggered: 0
+  control: {fileID: 0}
 --- !u!114 &114544309621022114
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -387,6 +371,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isLeftHand: 1
   rotateHand: {fileID: 114848399935154622}
+  control: {fileID: 0}
+--- !u!114 &114798492881937268
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1489774331190750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8366f9fe0a44641378b68de743dc5488, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftHandRotate: {fileID: 114848399935154622}
+  leftTrigger: {fileID: 114544309621022114}
+  leftHandRenderer: {fileID: 212806700988557370}
+  rightHandRotate: {fileID: 114955898213932184}
+  rightTrigger: {fileID: 114166208562209248}
+  rightHandRenderer: {fileID: 212627015158273476}
+  leftFromAngle: 150
+  leftToAngle: 30
+  leftRotateTime: 0.5
+  triggered: 0
+  successColor: {r: 0, g: 1, b: 0, a: 1}
+  failureColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &114848399935154622
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -417,6 +425,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+  isLeftHand: 1
+  control: {fileID: 0}
   fromAngle: 0
   toAngle: 0
   rotateTime: 0
@@ -450,6 +460,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+  isLeftHand: 0
+  control: {fileID: 0}
   fromAngle: -30
   toAngle: -150
   rotateTime: 0.2

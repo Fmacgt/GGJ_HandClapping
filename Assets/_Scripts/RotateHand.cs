@@ -9,6 +9,9 @@ namespace GGJ18
 	{
 		public Transform axisTr;
 		public AnimationCurve rotateCurve;
+		public bool isLeftHand;
+
+		public Control control;
 
 		public float fromAngle;
 		public float toAngle;
@@ -31,7 +34,8 @@ namespace GGJ18
 			_fromRotate = Quaternion.AngleAxis(fromAngle, axisTr.forward);
 			_toRotate = Quaternion.AngleAxis(toAngle, axisTr.forward);
 			LeanTween.value(0f, 1f, duration).setEase(rotateCurve)
-				.setOnUpdate(_updateRotate);
+				.setOnUpdate(_updateRotate)
+				.setOnComplete(_checkGameOver);
 		}
 
 		public void stop()
@@ -44,6 +48,13 @@ namespace GGJ18
 		private void _updateRotate(float t)
 		{
 			axisTr.rotation = Quaternion.Lerp(_fromRotate, _toRotate, t);
+		}
+
+		private void _checkGameOver()
+		{
+			if (isLeftHand) {
+				control.onGameOver();
+			}
 		}
 	}
 }

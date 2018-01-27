@@ -9,17 +9,18 @@ namespace GGJ18
 	{
 		public bool isLeftHand;
 		public RotateHand rotateHand;
+		public Control control;
 
 		/////////////////////////////////////////////////////////////////////////////////////
 
 		private void OnTriggerEnter2D(Collider2D other)
 		{
 			var otherRb = other.attachedRigidbody;
-			if (otherRb != null) {
-				var otherTrigger = otherRb.gameObject.GetComponent<HandTrigger>();
-				Debug.LogFormat("Hold hand trigger for {0} hand", isLeftHand ? "Left" : "Right");
+			rotateHand.stop();
 
-				rotateHand.stop();
+			if (!isLeftHand) {
+				Debug.LogFormat("calling {0}.onHandHeld()", control);
+				control.onHandHeld();
 			}
 		}
 	}
