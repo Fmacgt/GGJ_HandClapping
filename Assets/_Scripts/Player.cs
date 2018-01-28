@@ -67,6 +67,8 @@ namespace GGJ18
 			LeanTween.delayedCall(gameObject, crotchet * highFiveTimeRatio, () => {
 					host.checkHighFive();
 				});
+
+			gameObject.GetComponent<Passenger>().setAnimation(2);
 		}
 
 		public void startJumpUp(float startTime, float currentTime)
@@ -78,6 +80,8 @@ namespace GGJ18
 			LeanTween.moveLocal(bodyTr.gameObject, _jumpPos, crotchet * jumpTimeRatio)
 				.setEase(jumpCurve)
 				.setOnComplete(_onJumpEnd);
+
+			gameObject.GetComponent<Passenger>().setAnimation(2);
 		}
 
 		public void startDiveDown(float startTime, float currentTime)
@@ -108,6 +112,8 @@ namespace GGJ18
 			LeanTween.moveLocal(bodyTr.gameObject, _landPos, crotchet * fallTimeRatio)
 				.setEase(landCurve)
 				.setOnComplete(_onLanded);
+
+			gameObject.GetComponent<Passenger>().setAnimation(1);
 		}
 
 

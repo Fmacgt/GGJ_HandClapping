@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3a7edf2e017d428faa1ae8394ed131e, type: 3}
   m_Name: Test Level 1
   m_EditorClassIdentifier: 
-  songClip: {fileID: 8300000, guid: 87500bfce029c4d39bbb25d4069b4c0c, type: 3}
+  songClip: {fileID: 8300000, guid: 98002c6c33f294935a054049aed762e7, type: 3}
   leadingOffset: 0
   pitch: 1
   bpm: 100

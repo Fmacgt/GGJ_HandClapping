@@ -2,16 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 namespace GGJ18
 {
 	public sealed class SpawnAndMoveTest : MonoBehaviour
 	{
+		public Image hpBar;
+		public GameObject gameOverGroup;
+		public GameObject statusGroup;
+
 		public Transform spawnTr;
 		public GameObject passengerPrefab;
 
 		public AudioSource audioPlayer;
+		public AudioSource clapEffect;
 
 		public SongPosition songPosition;
 		public LevelData levelData;
@@ -21,6 +27,20 @@ namespace GGJ18
 		public float beatsToReachPlayer = 6;
 
 		public float moveSpeed = 5f;
+
+		public float hp = 100f;
+		public float drainRate = 10f;
+
+		//==============================================================================
+
+		public enum Status
+		{
+			Idle,
+			Running,
+			GameOver
+		}
+
+		public Status status = Status.Idle;
 
 		//==============================================================================
 
@@ -44,13 +64,10 @@ namespace GGJ18
 
 		private void Start()
 		{
-			songPosition.reset(audioPlayer, levelData.leadingOffset);
-			_lastBeatTime = 0f;
-			_beatCounter = 0;
-			_nextSpawnIdx = 0;
-
-			_passengers.Clear();
-			_player.crotchet = levelData.crotchet;
+			var passenger = _player.gameObject.GetComponent<Passenger>();
+			passenger.animationSet[0].enabled = false;
+			passenger.animationSet[1].enabled = true;
+			passenger.animationSet[2].enabled = false;
 
 			var offset = playerTr.position - spawnTr.position;
 			offset.y = 0f;
@@ -59,6 +76,10 @@ namespace GGJ18
 
 		private void Update()
 		{
+			if (status != Status.Running) {
+				return;
+			}
+
 			float songPt = songPosition.Value;
 
 			for (int i = 0; i < _passengers.Count; i++) {
@@ -98,9 +119,36 @@ namespace GGJ18
 			} else {
 				Debug.Log("In cooldown");
 			}
+
+
+			hp -= drainRate * Time.deltaTime;
+			hpBar.fillAmount = Mathf.Clamp(hp, 0, 100f) * 0.01f;
+			if (hp <= 0f) {
+				hp = 0f;
+				status = Status.GameOver;
+
+				gameOverGroup.SetActive(true);
+				statusGroup.SetActive(false);
+			}
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////
+
+		public void startGame()
+		{
+			songPosition.reset(audioPlayer, levelData.leadingOffset);
+			audioPlayer.Play();
+			_lastBeatTime = 0f;
+			_beatCounter = 0;
+			_nextSpawnIdx = 0;
+
+			_passengers.Clear();
+			_player.crotchet = levelData.crotchet;
+
+
+			statusGroup.SetActive(true);
+			status = Status.Running;
+		}
 
 		public void spawnPassenger(float startTime, float currentTime, bool isOnBlock)
 		{
@@ -114,6 +162,7 @@ namespace GGJ18
 			passenger.toPos = playerTr.position;
 			passenger.crotchet = levelData.crotchet;
 			passenger.host = this;
+			passenger.bodySprite.flipX = true;
 
 			passenger.updatePosition(currentTime);
 			if (isOnBlock) {
@@ -135,6 +184,7 @@ namespace GGJ18
 
 		public void checkHighFive()
 		{
+			bool matched = false;
 			for (int i = 0; i < _passengers.Count; i++) {
 				var passenger = _passengers[i];
 				if (passenger.status == Passenger.Status.RaisingHand) {
@@ -142,6 +192,7 @@ namespace GGJ18
 					if (Mathf.Abs(offset.y) <= VERTICAL_LIMIT) {
 						// TODO: compute matching rate(?)
 						passenger.onMatched();
+						matched = true;
 
 						/**
 						// TODO: switch passenger and player
@@ -154,10 +205,11 @@ namespace GGJ18
 							_player.startLanding(songPosition.Value);
 						}
 						**/
-					} else {
-						// TODO: missed?
 					}
 				}
+			}
+			if (!matched) {
+				_player.gameObject.GetComponent<Passenger>().setAnimation(1);
 			}
 		}
 
@@ -172,6 +224,11 @@ namespace GGJ18
 			if (oldStatus == Player.Status.Falling || oldStatus == Player.Status.Jumping) {
 				_player.startLanding(songPosition.Value);
 			}
+
+			clapEffect.Play();
+
+			hp = Mathf.Clamp(hp + _player.data.healRate, 0f, 100f);
+			hpBar.fillAmount = Mathf.Clamp(hp, 0, 100f) * 0.01f;
 		}
 	}
 }

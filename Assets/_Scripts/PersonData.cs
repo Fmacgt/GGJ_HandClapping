@@ -9,5 +9,6 @@ namespace GGJ18
 	public sealed class PersonData : ScriptableObject
 	{
 		public float fillIncrement = 0.1f;
+		public float healRate = 20f;
 	}
 }

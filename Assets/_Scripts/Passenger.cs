@@ -25,6 +25,10 @@ namespace GGJ18
 		public GameObject blockObj;
 		public float blockOffset = 1f;
 
+		public SpriteAnimation[] animationSet;
+
+		public Color[] colorList;
+
 		//==============================================================================
 
 		public enum Status
@@ -37,6 +41,13 @@ namespace GGJ18
 		}
 
 		public Status status = Status.Standing;
+
+		/////////////////////////////////////////////////////////////////////////////////////
+
+		private void Start()
+		{
+			bodySprite.color = colorList[Random.Range(0, colorList.Length)];
+		}
 
 		/////////////////////////////////////////////////////////////////////////////////////
 
@@ -81,6 +92,7 @@ namespace GGJ18
 			otherPassenger.startTime = currentTime;
 			otherPassenger.host = host;
 			otherPassenger.status = Status.Missed;
+			otherPassenger.bodySprite.flipX = true;
 			host.addPassenger(otherPassenger);
 
 
@@ -93,7 +105,12 @@ namespace GGJ18
 
 
 			host.removePassenger(this);
-			bodySprite.color = Color.gray;
+			bodySprite.flipX = false;
+
+			animationSet[0].enabled = false;
+			animationSet[1].enabled = true;
+			animationSet[2].enabled = false;
+
 			return gameObject.GetComponent<Player>();
 		}
 
@@ -104,20 +121,29 @@ namespace GGJ18
 			bodyTr.localPosition += Vector3.up * blockOffset;
 		}
 
+		public void setAnimation(int idx)
+		{
+			for (int i = 0; i < 3; i++) {
+				animationSet[i].enabled = false;
+			}
+
+			animationSet[idx].enabled = true;
+		}
+
 		/////////////////////////////////////////////////////////////////////////////////////
 
 		public void startRaisingHand()
 		{
 			status = Status.RaisingHand;
 
-			bodySprite.color = Color.blue;
+			animationSet[0].enabled = false;
+			animationSet[1].enabled = false;
+			animationSet[2].enabled = true;
 		}
 
 		public void onMissed(float currentTime)
 		{
 			status = Status.Missed;
-
-			bodySprite.color = Color.red;
 
 			var offset = toPos - fromPos;
 			fromPos = transform.position;
@@ -128,8 +154,6 @@ namespace GGJ18
 		public void onMatched()
 		{
 			status = Status.Switching;
-
-			bodySprite.color = Color.green;
 		}
 	}
 }
