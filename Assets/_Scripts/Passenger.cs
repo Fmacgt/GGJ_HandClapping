@@ -19,6 +19,12 @@ namespace GGJ18
 		public SpriteRenderer bodySprite;
 		public SpawnAndMoveTest host;
 
+		public Transform bodyTr;
+
+		public bool onABlock = false;
+		public GameObject blockObj;
+		public float blockOffset = 1f;
+
 		//==============================================================================
 
 		public enum Status
@@ -76,9 +82,24 @@ namespace GGJ18
 			host.addPassenger(otherPassenger);
 
 
+			if (onABlock) {
+				onABlock = false;
+				blockObj.SetActive(false);
+
+				otherPassenger.blockObj.SetActive(true);
+			}
+
+
 			host.removePassenger(this);
 			bodySprite.color = Color.gray;
 			return gameObject.GetComponent<Player>();
+		}
+
+		public void setOnBlock()
+		{
+			onABlock = true;
+			blockObj.SetActive(true);
+			bodyTr.localPosition += Vector3.up * blockOffset;
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////

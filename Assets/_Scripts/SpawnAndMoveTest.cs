@@ -30,6 +30,8 @@ namespace GGJ18
 		private float _lastBeatTime = 0f;
 		private int _beatCounter = 0;
 
+		public const float VERTICAL_LIMIT = 0.25f;
+
 		/////////////////////////////////////////////////////////////////////////////////////
 
 		private void Awake()
@@ -107,6 +109,9 @@ namespace GGJ18
 			passenger.host = this;
 
 			passenger.updatePosition(currentTime);
+			if (Random.value <= 0.5f) {
+				passenger.setOnBlock();
+			}
 
 			_passengers.Add(passenger);
 		}
@@ -126,14 +131,23 @@ namespace GGJ18
 			for (int i = 0; i < _passengers.Count; i++) {
 				var passenger = _passengers[i];
 				if (passenger.status == Passenger.Status.RaisingHand) {
-					// TODO: compute matching rate(?)
-					passenger.onMatched();
+					var offset = passenger.bodyTr.position - _player.bodyTr.position;
+					if (Mathf.Abs(offset.y) <= VERTICAL_LIMIT) {
+						// TODO: compute matching rate(?)
+						passenger.onMatched();
 
-					// TODO: switch passenger and player
-					_player = passenger.switchToPlayer(_player, songPosition.Value);
-					_player.transform.position = playerTr.position;
-					_player.host = this;
-					_player.crotchet = levelData.crotchet;
+						// TODO: switch passenger and player
+						var oldStatus = _player.status;
+						_player = passenger.switchToPlayer(_player, songPosition.Value);
+						_player.transform.position = playerTr.position;
+						_player.host = this;
+						_player.crotchet = levelData.crotchet;
+						if (oldStatus == Player.Status.Falling || oldStatus == Player.Status.Jumping) {
+							_player.startLanding(songPosition.Value);
+						}
+					} else {
+						// TODO: missed?
+					}
 				}
 			}
 		}
