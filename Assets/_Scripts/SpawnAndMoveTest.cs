@@ -136,6 +136,7 @@ namespace GGJ18
 						// TODO: compute matching rate(?)
 						passenger.onMatched();
 
+						/**
 						// TODO: switch passenger and player
 						var oldStatus = _player.status;
 						_player = passenger.switchToPlayer(_player, songPosition.Value);
@@ -145,10 +146,24 @@ namespace GGJ18
 						if (oldStatus == Player.Status.Falling || oldStatus == Player.Status.Jumping) {
 							_player.startLanding(songPosition.Value);
 						}
+						**/
 					} else {
 						// TODO: missed?
 					}
 				}
+			}
+		}
+
+		public void applyMatching(Passenger passenger)
+		{
+			// TODO: switch passenger and player
+			var oldStatus = _player.status;
+			_player = passenger.switchToPlayer(_player, songPosition.Value);
+			_player.transform.position = playerTr.position;
+			_player.host = this;
+			_player.crotchet = levelData.crotchet;
+			if (oldStatus == Player.Status.Falling || oldStatus == Player.Status.Jumping) {
+				_player.startLanding(songPosition.Value);
 			}
 		}
 	}
