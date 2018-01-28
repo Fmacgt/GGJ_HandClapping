@@ -76,6 +76,10 @@ namespace GGJ18
 					spawnPassenger(_lastBeatTime, songPt, levelData.timeTable[_nextSpawnIdx].onBlock);
 
 					_nextSpawnIdx++;
+					if (_nextSpawnIdx >= levelData.timeTable.Length && levelData.looping) {
+						_beatCounter = 0;
+						_nextSpawnIdx = 0;
+					}
 				}
 			}
 

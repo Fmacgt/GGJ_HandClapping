@@ -16,6 +16,8 @@ namespace GGJ18
 
 		public float crotchet = 0.6f;
 
+		public bool looping = true;
+
 		// TEMP
 		public float beatPerSpawn = 2f;
 
