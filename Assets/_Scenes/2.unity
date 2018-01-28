@@ -280,6 +280,9 @@ MonoBehaviour:
   audioPlayer: {fileID: 1303466433}
   songPosition: {fileID: 11400000, guid: 0ff99c570512048df9534c2c1e951cfe, type: 2}
   levelData: {fileID: 11400000, guid: 9738b6f3fc32b49ffa1d606c4d014e6c, type: 2}
+  playerTr: {fileID: 404169974}
+  beatsToReachPlayer: 6
+  moveSpeed: 5
 --- !u!4 &1303466432
 Transform:
   m_ObjectHideFlags: 0

@@ -81,6 +81,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efd0f613bd9ff45e299171bd5f235faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lifeTime: 0
+  startTime: 0
+  fromPos: {x: 0, y: 0, z: 0}
+  toPos: {x: 0, y: 0, z: 0}
+  crotchet: 0
+  bodySprite: {fileID: 212833558283817968}
+  host: {fileID: 0}
+  status: 0
 --- !u!212 &212833558283817968
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -14,7 +14,7 @@ namespace GGJ18
 		public float pitch = 1f;
 		public float bpm = 100f;
 
-		public float crotchet;
+		public float crotchet = 0.6f;
 
 		// TEMP
 		public float beatPerSpawn = 2f;
