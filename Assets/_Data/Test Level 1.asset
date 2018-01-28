@@ -14,4 +14,6 @@ MonoBehaviour:
   songClip: {fileID: 8300000, guid: 87500bfce029c4d39bbb25d4069b4c0c, type: 3}
   leadingOffset: 0
   pitch: 1
+  bpm: 100
+  crotchet: 0.6
   beatPerSpawn: 2
