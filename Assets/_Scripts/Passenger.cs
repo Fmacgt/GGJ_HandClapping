@@ -62,6 +62,8 @@ namespace GGJ18
 				} else if (status == Status.Missed) {
 					host.removePassenger(this);
 					Destroy(gameObject);
+				} else if (status == Status.Switching) {
+					host.applyMatching(this);
 				}
 			}
 		}

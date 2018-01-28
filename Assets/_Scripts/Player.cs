@@ -49,8 +49,6 @@ namespace GGJ18
 		{
 			_landPos = bodyTr.localPosition;
 			_jumpPos = _landPos + Vector3.up;
-//			_landY = bodyTr.localPosition.y;
-//			_jumpY = _landY + 1f;
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +60,7 @@ namespace GGJ18
 
 		public void startHighFive(float startTime, float currentTime)
 		{
-			actionStartTime = startTime;
+			actionStartTime = currentTime;
 
 			status = Status.RaisingHand;
 
@@ -73,24 +71,22 @@ namespace GGJ18
 
 		public void startJumpUp(float startTime, float currentTime)
 		{
-			actionStartTime = startTime;
+			actionStartTime = currentTime;
 
 			status = Status.Jumping;
 
 			LeanTween.moveLocal(bodyTr.gameObject, _jumpPos, crotchet * jumpTimeRatio)
-//			LeanTween.moveY(bodyTr.gameObject, _jumpY, crotchet * jumpTimeRatio)
 				.setEase(jumpCurve)
 				.setOnComplete(_onJumpEnd);
 		}
 
 		public void startDiveDown(float startTime, float currentTime)
 		{
-			actionStartTime = startTime;
+			actionStartTime = currentTime;
 
 			status = Status.DashingDown;
 
 			LeanTween.moveLocal(bodyTr.gameObject, _landPos, crotchet * diveTimeRatio)
-//			LeanTween.moveY(bodyTr.gameObject, _landY, crotchet * diveTimeRatio)
 				.setEase(jumpCurve)
 				.setOnComplete(_onDashLanded);
 		}
@@ -110,7 +106,6 @@ namespace GGJ18
 			status = Status.Falling;
 
 			LeanTween.moveLocal(bodyTr.gameObject, _landPos, crotchet * fallTimeRatio)
-//			LeanTween.moveY(bodyTr.gameObject, _landY, crotchet * fallTimeRatio)
 				.setEase(landCurve)
 				.setOnComplete(_onLanded);
 		}
@@ -127,7 +122,7 @@ namespace GGJ18
 		{
 			host.checkHighFive();
 
-			startLanding(actionStartTime + crotchet * jumpTimeRatio);
+			startLanding(actionStartTime);// + crotchet * jumpTimeRatio);
 		}
 
 		private void _onLanded()
