@@ -19,7 +19,7 @@ MonoBehaviour:
   looping: 1
   beatPerSpawn: 1
   timeTable:
-  - beat: 2
+  - beat: 1
     typeData: {fileID: 11400000, guid: 2f26fc1fc8e7e47bfbb7a5289838c2e3, type: 2}
     onBlock: 0
   - beat: 4

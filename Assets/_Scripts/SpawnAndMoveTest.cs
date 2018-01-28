@@ -30,6 +30,8 @@ namespace GGJ18
 
 		public float hp = 100f;
 		public float drainRate = 10f;
+        public float gameTimer = 0f;
+        public Text gameOverTimerText;
 
 		//==============================================================================
 
@@ -80,6 +82,8 @@ namespace GGJ18
 				return;
 			}
 
+            gameTimer += Time.deltaTime;
+
 			float songPt = songPosition.Value;
 
 			for (int i = 0; i < _passengers.Count; i++) {
@@ -128,6 +132,7 @@ namespace GGJ18
 				status = Status.GameOver;
 
 				gameOverGroup.SetActive(true);
+                gameOverTimerText.text = "You spreaded happiness for "+ gameTimer.ToString()+" seconds!";
 				statusGroup.SetActive(false);
 			}
 		}
