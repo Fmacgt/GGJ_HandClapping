@@ -16,4 +16,17 @@ MonoBehaviour:
   pitch: 1
   bpm: 100
   crotchet: 0.6
-  beatPerSpawn: 2
+  beatPerSpawn: 1
+  timeTable:
+  - beat: 4
+    typeData: {fileID: 11400000, guid: 2f26fc1fc8e7e47bfbb7a5289838c2e3, type: 2}
+    onBlock: 0
+  - beat: 6
+    typeData: {fileID: 11400000, guid: 2f26fc1fc8e7e47bfbb7a5289838c2e3, type: 2}
+    onBlock: 1
+  - beat: 8
+    typeData: {fileID: 11400000, guid: 2f26fc1fc8e7e47bfbb7a5289838c2e3, type: 2}
+    onBlock: 1
+  - beat: 9
+    typeData: {fileID: 11400000, guid: 2f26fc1fc8e7e47bfbb7a5289838c2e3, type: 2}
+    onBlock: 0

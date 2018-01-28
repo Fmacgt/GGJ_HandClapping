@@ -19,6 +19,18 @@ namespace GGJ18
 		// TEMP
 		public float beatPerSpawn = 2f;
 
+		//==============================================================================
+
+		[System.Serializable]
+		public struct SpawnTime
+		{
+			public int beat;
+			public PersonData typeData;
+			public bool onBlock;
+		}
+
+		public SpawnTime[] timeTable;
+
 		/////////////////////////////////////////////////////////////////////////////////////
 
 		private void OnEnable()
