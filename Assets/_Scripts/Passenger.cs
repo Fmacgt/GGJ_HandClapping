@@ -26,7 +26,8 @@ namespace GGJ18
 			Standing,
 			RaisingHand,
 			Missed,
-			Switching
+			Switching,
+			Disabled,
 		}
 
 		public Status status = Status.Standing;
@@ -54,8 +55,30 @@ namespace GGJ18
 					onMissed(currentTime);
 				} else if (status == Status.Missed) {
 					host.removePassenger(this);
+					Destroy(gameObject);
 				}
 			}
+		}
+
+		public Player switchToPlayer(Player oldPlayer, float currentTime)
+		{
+			oldPlayer.turnOff();
+
+			var otherPassenger = oldPlayer.gameObject.GetComponent<Passenger>();
+			var offset = toPos - fromPos;
+			offset.y = 0f;
+			otherPassenger.fromPos = otherPassenger.transform.position;
+			otherPassenger.toPos = otherPassenger.fromPos + offset;
+			otherPassenger.lifeTime = lifeTime;
+			otherPassenger.startTime = currentTime;
+			otherPassenger.host = host;
+			otherPassenger.status = Status.Missed;
+			host.addPassenger(otherPassenger);
+
+
+			host.removePassenger(this);
+			bodySprite.color = Color.gray;
+			return gameObject.GetComponent<Player>();
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////

@@ -17,6 +17,7 @@ namespace GGJ18
 		public LevelData levelData;
 
 		public Transform playerTr;
+		public Player initPlayer;
 		public float beatsToReachPlayer = 6;
 
 		public float moveSpeed = 5f;
@@ -24,6 +25,7 @@ namespace GGJ18
 		//==============================================================================
 
 		private List<Passenger> _passengers;
+		private Player _player;
 
 		private float _lastBeatTime = 0f;
 		private int _beatCounter = 0;
@@ -33,6 +35,8 @@ namespace GGJ18
 		private void Awake()
 		{
 			_passengers = new List<Passenger>();
+			_player = initPlayer;
+			_player.host = this;
 		}
 
 		private void Start()
@@ -42,6 +46,7 @@ namespace GGJ18
 			_beatCounter = 0;
 
 			_passengers.Clear();
+			_player.crotchet = levelData.crotchet;
 
 			var offset = playerTr.position - spawnTr.position;
 			offset.y = 0f;
@@ -68,6 +73,22 @@ namespace GGJ18
 					spawnPassenger(_lastBeatTime, songPt);
 				}
 			}
+
+
+			if (!_player.inCooldown(songPt)) {
+				if (Input.GetKeyDown(KeyCode.Space)) {
+					// TODO: try to high-five
+					_player.startHighFive(_lastBeatTime, songPt);
+				} else if (Input.GetKeyDown(KeyCode.UpArrow)) {
+					// TODO: try to jump up and high-five
+					_player.startJumpUp(_lastBeatTime, songPt);
+				} else if (Input.GetKeyDown(KeyCode.DownArrow)) {
+					// TODO: try to dash down and high-five
+					_player.startDiveDown(_lastBeatTime, songPt);
+				}
+			} else {
+				Debug.Log("In cooldown");
+			}
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +114,28 @@ namespace GGJ18
 		public void removePassenger(Passenger target)
 		{
 			_passengers.Remove(target);
-			Destroy(target.gameObject);
+		}
+
+		public void addPassenger(Passenger target)
+		{
+			_passengers.Add(target);
+		}
+
+		public void checkHighFive()
+		{
+			for (int i = 0; i < _passengers.Count; i++) {
+				var passenger = _passengers[i];
+				if (passenger.status == Passenger.Status.RaisingHand) {
+					// TODO: compute matching rate(?)
+					passenger.onMatched();
+
+					// TODO: switch passenger and player
+					_player = passenger.switchToPlayer(_player, songPosition.Value);
+					_player.transform.position = playerTr.position;
+					_player.host = this;
+					_player.crotchet = levelData.crotchet;
+				}
+			}
 		}
 	}
 }
