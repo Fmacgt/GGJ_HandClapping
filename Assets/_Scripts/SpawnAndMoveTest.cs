@@ -29,6 +29,7 @@ namespace GGJ18
 
 		private float _lastBeatTime = 0f;
 		private int _beatCounter = 0;
+		private int _nextSpawnIdx = 0;
 
 		public const float VERTICAL_LIMIT = 0.25f;
 
@@ -46,6 +47,7 @@ namespace GGJ18
 			songPosition.reset(audioPlayer, levelData.leadingOffset);
 			_lastBeatTime = 0f;
 			_beatCounter = 0;
+			_nextSpawnIdx = 0;
 
 			_passengers.Clear();
 			_player.crotchet = levelData.crotchet;
@@ -69,10 +71,15 @@ namespace GGJ18
 				_lastBeatTime += levelData.crotchet;
 
 				_beatCounter++;
+				if (_nextSpawnIdx < levelData.timeTable.Length &&
+						_beatCounter >= levelData.timeTable[_nextSpawnIdx].beat) {
+					spawnPassenger(_lastBeatTime, songPt, levelData.timeTable[_nextSpawnIdx].onBlock);
 
-				// TODO: check and spawn a new passenger
-				if (_beatCounter % levelData.beatPerSpawn == 0) {
-					spawnPassenger(_lastBeatTime, songPt);
+					_nextSpawnIdx++;
+					if (_nextSpawnIdx >= levelData.timeTable.Length && levelData.looping) {
+						_beatCounter = 0;
+						_nextSpawnIdx = 0;
+					}
 				}
 			}
 
@@ -95,7 +102,7 @@ namespace GGJ18
 
 		/////////////////////////////////////////////////////////////////////////////////////
 
-		public void spawnPassenger(float startTime, float currentTime)
+		public void spawnPassenger(float startTime, float currentTime, bool isOnBlock)
 		{
 			var obj = Instantiate(passengerPrefab);
 			obj.transform.position = spawnTr.position;
@@ -109,7 +116,7 @@ namespace GGJ18
 			passenger.host = this;
 
 			passenger.updatePosition(currentTime);
-			if (Random.value <= 0.5f) {
+			if (isOnBlock) {
 				passenger.setOnBlock();
 			}
 

@@ -16,8 +16,22 @@ namespace GGJ18
 
 		public float crotchet = 0.6f;
 
+		public bool looping = true;
+
 		// TEMP
 		public float beatPerSpawn = 2f;
+
+		//==============================================================================
+
+		[System.Serializable]
+		public struct SpawnTime
+		{
+			public int beat;
+			public PersonData typeData;
+			public bool onBlock;
+		}
+
+		public SpawnTime[] timeTable;
 
 		/////////////////////////////////////////////////////////////////////////////////////
 
